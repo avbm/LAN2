@@ -10,16 +10,24 @@ if(len(sys.argv) > 2):
     serverPortBase = int(sys.argv[2])
 else:
     serverPortBase = 13000
-command = "getSocket"
+username = input("Enter username:")
+passwd = input("Enter password:")
+command = "getSocket "+username+" "+passwd
 clientSocket = socket(AF_INET,SOCK_STREAM)
 clientSocket.connect((serverName, serverPortBase))
 clientSocket.send(bytearray(command.encode("utf-8")))
 #startTime = clock()
 response = clientSocket.recv(1024)
 response = response.decode("utf-8")
-print("Session socket:"+response)
-serverPort = int(response)
-clientSocket.close()
+if response.split()[0] == "Success":
+    print("Session socket:"+response)
+    serverPort = int(response.split()[1])
+    clientSocket.close()
+else:
+    print("  Unknown username or password incorrect\n  Exiting Client\n")
+    clientSocket.close()
+    quit()
+#clientSocket.close()
 while 1: 
     command = input('Enter Command:')   
     if command.lower() == "bye" or command.lower() == "quit":

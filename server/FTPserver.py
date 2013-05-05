@@ -16,6 +16,8 @@ maxClients = 5
 clientSocketState = maxClients * [0]
 #print(clientSocketState)
 serverSocket = maxClients * [0]
+
+
 for x in range(maxClients):
     serverSocket[x] = socket(AF_INET,SOCK_STREAM)
     serverSocket[x].bind(('',(serverDataPortStart+x+1)))
@@ -40,11 +42,22 @@ def resolve_command(command, connectionSocket):
             connectionSocket.send(bytearray(response.encode("utf-8")))
             connectionSocket.close()
 #getSocket
-        elif command == "getSocket":
-            response = str(clientSocketState.index(0) + 1 + serverDataPortStart)
-            clientSocketState[clientSocketState.index(0)] = 1
-            connectionSocket.send(bytearray(response.encode("utf-8")))
-            connectionSocket.close()
+        elif command.split()[0] == "getSocket":
+            users = {"testuser1":"testpwd1", "testuser2":"testpwd2"} #username:pwd pairs
+            loginSuccess = 0
+            for x in users:
+                if x == command.split()[1]:
+                    if users[x] == command.split()[2]:
+                     loginSuccess = 1
+            if loginSuccess == 1:   
+                response = "Success "+str(clientSocketState.index(0) + 1 + serverDataPortStart)
+                clientSocketState[clientSocketState.index(0)] = 1
+                connectionSocket.send(bytearray(response.encode("utf-8")))
+                connectionSocket.close()
+            else:
+                response = "Fail"
+                connectionSocket.send(bytearray(response.encode("utf-8")))
+                connectionSocket.close()
 #releaseSocket
         elif command.split()[0] == "releaseSocket":
             response = " ".join(command.split()[1:]) #deletes the preceding command name
@@ -140,7 +153,7 @@ class serverThread (threading.Thread):
             #print(command)
             returnVal = resolve_command(command,connectionSocket)
             if(returnVal==1):
-                break
+                quit()
 
 
 #initializing threads for clients
@@ -158,7 +171,7 @@ while 1:
     #print(command)
     returnVal = resolve_command(command,connectionSocket)
     if(returnVal==1):
-        break
+        quit()
 for x in range(maxClients):
     serverSocket[x].close()
 serverSocketBase.close()
