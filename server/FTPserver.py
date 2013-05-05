@@ -37,7 +37,8 @@ def resolve_command(command, connectionSocket):
             3. get <filename> : gets <filename> from server
             4. put <filename> : puts <filename> to server
             5. list : lists the contents of working directory at server
-            6. bye / quit : Either of the commands can be used to exit client
+            6. cd <path>: changes working directory to <path>
+            7. bye / quit : Either of the commands can be used to exit client
             """
             connectionSocket.send(bytearray(response.encode("utf-8")))
             connectionSocket.close()
