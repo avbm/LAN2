@@ -11,7 +11,9 @@ Notes:
 4. The maximum number of supported clients can be specified by modifying the maxClient variable (default set to 5)
 5. The current multi-threading implementation is very crude, inefficient and not secure 
 6. username/password has been implemented but it is very crude. It only acts for authentication but is very poor in terms of security since passwords are stored and tranmitted in cleartext
-
+7. All the extra credit work except seperate socket/port for data has been implemented
+8. Data transfer takes place in 1KB buffers and hence might take some time for very large files.
+9. The server and client scripts are located in thier respective directories so obviously you have to navigate(cd) to those directories to execute the scripts.
 
 USAGE INSTRUCTIONS
 1. ./FTPserver.py <port> #assumes that /usr/bin/python points to python3 binary
